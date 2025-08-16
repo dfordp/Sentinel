@@ -4,11 +4,11 @@ import { createContext } from "./lib/context";
 import { appRouter } from "./routers/index";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { logger } from "hono/logger";
+import { networkLogger } from "@/middlewares/network-logger";
 
 const app = new Hono();
 
-app.use(logger());
+app.use(networkLogger);
 app.use(
   "/*",
   cors({

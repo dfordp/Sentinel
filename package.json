@@ -17,7 +17,9 @@
     "db:generate": "turbo -F server db:generate",
     "db:migrate": "turbo -F server db:migrate"
   },
-  "dependencies": {},
+  "dependencies": {
+    "winston": "^3.17.0"
+  },
   "devDependencies": {
     "turbo": "^2.5.4"
   },
