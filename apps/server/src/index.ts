@@ -12,7 +12,7 @@ app.use(networkLogger);
 app.use(
   "/*",
   cors({
-    origin: process.env.CORS_ORIGIN || "",
+    origin: "*",
     allowMethods: ["GET", "POST", "OPTIONS"],
   })
 );
