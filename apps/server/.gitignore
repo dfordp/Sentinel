@@ -50,3 +50,5 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+src/db/prisma
