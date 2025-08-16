@@ -1,0 +1,15 @@
+generator client {
+    provider        = "prisma-client-js"
+    output          = ".././src/db/prisma"
+    previewFeatures = ["driverAdapters", "relationJoins", "typedSql"]
+    binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgres"
+    url      = env("DATABASE_URL")
+}
+
+model user {
+    id String @id @default(ulid())
+}
