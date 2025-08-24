@@ -18,6 +18,7 @@
     "db:migrate": "turbo -F server db:migrate"
   },
   "dependencies": {
+    "@octokit/oauth-app": "^8.0.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
