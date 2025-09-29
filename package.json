@@ -18,9 +18,11 @@
     "db:migrate": "turbo -F server db:migrate"
   },
   "dependencies": {
+    "@octokit/oauth-app": "^8.0.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "prettier": "^3.6.2",
     "turbo": "^2.5.4"
   },
   "packageManager": "bun@1.2.20"

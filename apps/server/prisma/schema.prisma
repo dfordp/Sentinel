@@ -11,5 +11,10 @@ datasource db {
 }
 
 model user {
-    id String @id @default(ulid())
+    id          String   @id @default(ulid())
+    provider_id String   @unique
+    name        String?
+    email       String?
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
 }
