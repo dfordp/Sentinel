@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
-import Header from "@/components/header";
+// import Header from "@/components/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "pr-sentinal",
-  description: "pr-sentinal",
+  title: "PR Sentinal",
+  description: " Built for Maintainers with high PR volume and limited time. Stop guessing which PRs matter focus your time where it counts. ",
 };
 
 export default function RootLayout({
@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <Providers>
           <div className="grid grid-rows-[auto_1fr] h-svh">
-            <Header />
+            {/* <Header /> */}
             {children}
           </div>
         </Providers>
