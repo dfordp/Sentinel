@@ -5,8 +5,11 @@ import { appRouter } from "./routers/index";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { networkLogger } from "@/middlewares/network-logger";
+import { extendBigint } from "@/utils/extend-bigint";
 
 const app = new Hono();
+
+extendBigint();
 
 app.use(networkLogger);
 app.use(
