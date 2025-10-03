@@ -24,13 +24,14 @@ model user {
 }
 
 model user_github_token {
-    id            String   @id @default(ulid())
-    user_id       String   @unique
-    access_token  String
-    refresh_token String
-    force_reauth  Boolean  @default(false)
-    created_at    DateTime @default(now())
-    updated_at    DateTime @updatedAt
+    id                   String   @id @default(ulid())
+    user_id              String   @unique
+    access_token         String
+    refresh_token        String
+    force_reauth         Boolean  @default(false)
+    refresh_token_expire BigInt
+    created_at           DateTime @default(now())
+    updated_at           DateTime @updatedAt
 
     user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
