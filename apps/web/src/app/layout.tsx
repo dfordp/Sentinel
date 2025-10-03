@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Outfit, Space_Grotesk } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
-import Header from "@/components/header";
+// import Header from "@/components/header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "pr-sentinal",
-  description: "pr-sentinal",
+  title: "PR Sentinel",
+  description: " Built for Maintainers with high PR volume and limited time. Stop guessing which PRs matter focus your time where it counts. ",
 };
 
 export default function RootLayout({
@@ -27,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} antialiased`}
       >
         <Providers>
           <div className="grid grid-rows-[auto_1fr] h-svh">
-            <Header />
+            {/* <Header /> */}
             {children}
           </div>
         </Providers>
