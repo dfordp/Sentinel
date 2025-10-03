@@ -191,6 +191,8 @@ body {
   --shadow-opacity: var(--shadow-opacity);
   --color-shadow-color: var(--shadow-color);
   --color-destructive-foreground: var(--destructive-foreground);
+  --font-primary: var(--font-outfit);
+  --font-secondary: var(--font-space-grotesk);
 }
 
 @layer base {
