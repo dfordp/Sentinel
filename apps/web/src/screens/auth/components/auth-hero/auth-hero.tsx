@@ -5,13 +5,13 @@ import Hero from "../../../../../public/auth-hero.jpg";
 
 const AuthHero = () => {
 	return (
-		<div className="flex-1 h-screen lg:flex hidden items-center justify-center bg-primary font-secondary rounded-l-md">
+		<div className="flex-1 h-screen lg:flex hidden items-center justify-center bg-primary font-secondary">
 			<Image
 				src={Hero}
 				width={1000}
 				height={1000}
 				alt="Auth Hero Image"
-				className="w-full h-screen object-cover rounded-l-md"
+				className="w-full h-screen object-cover"
 			/>
 		</div>
 	);

@@ -17,9 +17,9 @@ export default function AuthCard() {
   }
 
   return (
-		<div className="lg:w-1/2 flex flex-col px-6 py-3 min-h-screen font-secondary">
+		<div className="lg:w-1/2 flex flex-col mx-auto px-6 py-3 min-h-screen font-secondary">
       <Logo/>
-			<div className=" flex-1 w-full flex justify-center items-center max-w-[500px]">
+			<div className=" flex-1 w-full flex justify-center items-center max-w-[640px]">
 
         <div>
           <p className="font-secondary tracking-wide text-4xl font-medium">
@@ -32,7 +32,7 @@ export default function AuthCard() {
 
           <GithubButton onClick={startGithubLogin} loading={loading} className="mt-6 w-full flex items-center justify-center" />
 
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-2">
             By continuing you agree to the terms.
           </p>
         </div>
