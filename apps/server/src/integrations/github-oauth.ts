@@ -30,6 +30,6 @@ export class GithubOAuth implements IntegrationTool {
 			scopes: ["read:user", "user:email", "read:org"],
 		});
 
-		return response.url;
+		return `${response.url}&prompt=select_account`;
 	}
 }
