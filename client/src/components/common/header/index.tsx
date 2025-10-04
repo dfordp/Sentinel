@@ -13,7 +13,7 @@ const chakraPetch = Chakra_Petch({
 export const Header = () => {
   return (
     <nav
-      className="fixed top-0 left-0 z-50 w-full h-16 flex "
+      className="fixed top-0 left-0 z-50 w-full h-16"
     >
       <div className="container mx-auto px-3">
         <div className="flex h-16 items-center justify-between">

@@ -41,7 +41,6 @@ export default function RootLayout({
               richColors 
               theme='light' 
             />
-
             {children}
             <Analytics/>
           </ThemeProvider>
