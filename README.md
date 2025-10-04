@@ -1,165 +1,120 @@
-🔍 Sentinel — Get Signal, Kill Noise
-A lightweight GitHub App that gives open source maintainers actionable community intelligence on:
+# 🚨 PR Sentinel (MVP)
 
-Which PRs truly solve issues
+PR Sentinel is a GitHub App designed to help **open source maintainers and teams** cut through the noise in their repositories.
+Instead of just code review, PR Sentinel focuses on **community health, contribution quality, and actionable signals** so maintainers can spend less time filtering spam or duplicates — and more time merging meaningful work.
 
-Which ones are duplicate or spam
+---
 
-Whether new PRs add value or just noise
+## ✨ What It Does (MVP)
 
-What’s worth rewarding—and what’s worth skipping
+In this MVP version, PR Sentinel provides a simple but powerful workflow:
 
-⚡️ Why?
-In fast-paced open source projects, maintainers face a flood of PRs:
-✅ Some deliver solutions.
-⚠️ Some are disconnected or misleading.
-❌ Some are “vibe spam” or low-effort, targeting bounty programs.
+1. **Load a Repository**
 
-PR Sentinel isn’t just another code reviewer. It answers:
+   * Select a repo and trigger a background job to sync its open PRs and issues.
 
-“Does this PR solve a real issue for our project and community, or is it just noise?”
+2. **Embed Contributions with pgvector**
 
-Skip the manual hunt through ancient issues and avoid burning time triaging irrelevant submissions.
+   * PRs and issues are stored in PostgreSQL with vector embeddings (via pgvector) for semantic search.
 
-🗂️ What It Does
-✅ Auto-classifies PRs
+3. **Surface Insights**
 
-Detects if a PR is properly linked to open/valid issues
+   * For each PR, PR Sentinel shows:
 
-Flags PRs that are missing links or context, or seem unrelated
+     * **Similar past PRs or issues** (to catch duplicates or related work).
+     * **Contributor context** (new vs returning).
+     * **Simple signals** like missing linked issue or suspiciously low-effort descriptions.
 
-Spots contributor spam and repetitive, trivial edits
+4. **Temporary Workspace**
 
-✅ Summarizes PR & Issue Context
+   * Repositories can be loaded and unloaded dynamically.
+   * Data is cleaned up after the session/demo, so the system stays lean.
 
-Shows relationships, cross-links: “This PR closes #123, overlaps with PR #122”
+---
 
-Highlights stale/duplicate issues
+## 🧩 Why It Matters
 
-Spotlights contributors with repetitive activity
+Maintainers of popular repos face three key challenges:
 
-✅ Community Signal & Relevance Score
+* **Noise**: Spam PRs, duplicates, or trivial contributions.
+* **Context switching**: Hard to track if a new PR relates to older issues or previous attempts.
+* **Time pressure**: Limited time to triage community contributions.
 
-0–100% match: Does the PR really address the issue description?
+PR Sentinel addresses these by:
 
-Lightweight NLP scoring and comparison across related PRs
+* **Embedding repo context** (via pgvector) so PRs/issues can be matched semantically.
+* **Highlighting contributor activity** (new vs repeat).
+* **Providing actionable signals** at a glance.
 
-Insightful comments and status checks for maintainers
+This makes it easier to decide: **merge, request changes, or close**.
 
-✅ Action Suggestions
+---
 
-Merge candidate — high match, all checks passing
+## ⚙️ Technical Overview (MVP)
 
-Potential duplicate — overlaps with existing open PRs
+* **Backend**: FastAPI (receives GitHub webhooks, exposes APIs).
+* **Frontend**: Next.js + Tailwind (dashboard for maintainers).
+* **Database**: PostgreSQL with `pgvector` (hosted via Supabase or Docker).
+* **Background Tasks**: Workers to fetch data, generate embeddings, and clean up after use.
+* **Auth**: GitHub App installation flow (repo-scoped).
 
-Likely spam — trivial/unrelated, flagged for review or auto-close
+### Data Flow
 
-Needs clarifying — auto-comment to request clearer links or description
+1. Maintainer installs GitHub App.
+2. Webhook → Backend → Enqueue “Load Repo” task.
+3. Worker fetches PRs/issues, generates embeddings, stores in Postgres.
+4. Frontend queries backend for PR insights (similar PRs/issues, contributor history).
+5. Cleanup process deletes embeddings when repo/session ends.
 
-✅ Contributor Reputation & Health Analytics (unique differentiator)
+---
 
-Track contributor trust scores using merge history, review feedback, and flagged/spam activity
+## 🛠️ Features in MVP
 
-Visualize new vs. returning contributors, high-impact teammates, and “burnout risk” signals
+* [x] GitHub App integration
+* [x] Background task to load and embed repos
+* [x] Store embeddings in Postgres/pgvector
+* [x] Query API for “similar PRs/issues”
+* [x] Cleanup endpoints to remove repo data
+* [ ] Polished maintainer dashboard
 
-✅ Project Knowledge Graph & Governance Tools (unique differentiator)
+---
 
-Create a semantic map to search the evolution of features, linked discussions, and contributor impact
+## 🚀 Future Roadmap
 
-Track CLAs, compliance, onboarding documentation effectiveness
+The MVP lays the foundation for more advanced capabilities:
 
-🏆 Benefits
-🔹 For maintainers
-Decide faster: see which PRs are worth reviewing, which are likely spam, and spot outliers or duplicates immediately.
-Triage better, reward what matters.
+* AI-powered PR classification (spam/duplicate/valuable).
+* Contributor reputation and trust scoring.
+* Community health analytics (trends, bottlenecks).
+* Multi-repo governance dashboards.
+* Extensible knowledge graph for long-term history.
 
-🔹 For contributors
-Transparent feedback: see if PRs lack context or may be considered off-topic.
-Skip unnecessary back-and-forth for basic checks.
+---
 
-⚙️ How It Works
-GitHub App — organization-wide installation, secure and scoped
+## 📦 Deployment
 
-Works on PR creation/updates, listens to org events via webhooks
+* **Local**: Docker Compose (backend, frontend, Postgres).
+* **Cloud**: Supabase (Postgres + pgvector), Railway/Fly.io for backend, Vercel for frontend.
+* **Cleanup**: Automatic expiration of repo data after demo sessions.
 
-Pulls and processes related issues, PRs, contributor metadata
+---
 
-Uses fast NLP, clustering, and graph-based techniques for scoring/recommendation
+## 🎯 Target Users
 
-Posts results as comments, status checks, and dashboard entries
+* Open source maintainers
+* Community managers
+* Engineering orgs that manage external contributions
 
-Maintainers override or tune as needed
+---
 
-✨ Example
-text
-✅ PR Sentinel report for #42
+## 📖 Example Demo Flow
 
-- Linked issue: #35 (Open)
-- Relevance Score: 92% (Strong match)
-- Overlaps: PR #40 (Same file edits)
-- Community health: Author trust 4.8/5, no flagged spam in past 6 PRs
-- Suggestion: Review for merge, coordinate with PR #40 to resolve conflict.
-📣 Built For
-Busy maintainers handling high PR volume
+1. Install PR Sentinel GitHub App on a test repo.
+2. Load the repo in dashboard.
+3. View open PRs with:
 
-Teams running bug bounties who need to filter out low-effort submissions
+   * Contributor context
+   * “Similar Issues/PRs” section
+4. Cleanup repo data when done.
 
-Projects that want community growth but need to keep quality high
 
-Setup
-Here are direct Docker run commands for each required service, as well as the corresponding environment variable configuration for integrating them into your backend—for running alongside a Sentinel-style project like your outlined PR Sentinel tool.
-
-***
-
-### Docker Run Commands
-
-#### PostgreSQL
-```bash
-docker run -d --name my_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 -v my_postgres_data:/var/lib/postgresql/data postgres:latest
-```
-
-#### ZooKeeper (for Kafka)
-```bash
-docker run -d --name my_zookeeper -e ALLOW_ANONYMOUS_LOGIN=yes -p 2181:2181 -v my_zookeeper_data:/bitnami/zookeeper bitnami/zookeeper:latest
-```
-
-#### Kafka (Bitnami, after ZooKeeper is running)
-```bash
-docker run -d --name my_kafka --network bridge -e KAFKA_BROKER_ID=1 -e KAFKA_CFG_ZOOKEEPER_CONNECT=my_zookeeper:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -p 9092:9092 -v my_kafka_data:/bitnami/kafka bitnami/kafka:latest
-```
-
-#### RabbitMQ (Management UI enabled)
-```bash
-docker run -d --name my_rabbit -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest -p 5672:5672 -p 15672:15672 -v my_rabbit_data:/var/lib/rabbitmq rabbitmq:management
-```
-
-***
-
-### Backend Environment Variables
-
-- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres`
-- `DIRECT_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres`
-- `KAFKA_BROKER=localhost:9092`
-- `KAFKA_ZOOKEEPER=localhost:2181`
-- `RABBITMQ_URL=amqp://guest:guest@localhost:5672/`
-- `RABBITMQ_MANAGEMENT_URL=http://localhost:15672/`
-
-***
-
-### Usage Notes
-
-- Each Docker command can be run in the terminal to launch a corresponding service for Sentinel or any similar backend.[1][2][3]
-- Use the provided environment variables in your backend `.env` file or deployment config for seamless service integration and direct access.
-- All services will have persistent data via Docker volumes and are accessible through the specified ports on localhost, supporting reliable operation of features like PR classification, context summary, relevance scoring, and contributor analytics.
-
-This setup ensures that Sentinel—and related backend services—can leverage PostgreSQL, Kafka, and RabbitMQ for robust processing, analytics, and community intelligence workflows.[2][3][1]
-
-[1](https://hub.docker.com/_/postgres)
-[2](https://hub.docker.com/r/bitnami/kafka)
-[3](https://hub.docker.com/_/rabbitmq)
-
-🗝️ License
-MIT — use, modify, improve.
-
-Stop guessing which PRs matter. Focus signal—cut noise.
-PR Sentinel — see the project, not just the code.
