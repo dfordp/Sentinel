@@ -1,119 +1,116 @@
-# 🔍 PR Sentinel — Get Signal, Kill Noise
+🔍 Sentinel — Get Signal, Kill Noise
+A lightweight GitHub App that gives open source maintainers actionable community intelligence on:
 
-**A lightweight GitHub App to help maintainers quickly see:**
+Which PRs truly solve issues
 
-* Which PRs are relevant,
-* Which ones are duplicate or spam,
-* Whether they really address linked issues or just add noise,
-* And which ones are worth the bounty payout.
+Which ones are duplicate or spam
 
----
+Whether new PRs add value or just noise
 
-## ⚡️ Why?
+What’s worth rewarding—and what’s worth skipping
 
-In high-velocity open source projects (like Cal.com), maintainers get flooded with PRs:
-✅ Some solve real issues.
-⚠️ Some are half-baked or don’t do what they claim.
-❌ Some are vibe spam — minor, irrelevant, or drive-by bounty grabs.
+⚡️ Why?
+In fast-paced open source projects, maintainers face a flood of PRs:
+✅ Some deliver solutions.
+⚠️ Some are disconnected or misleading.
+❌ Some are “vibe spam” or low-effort, targeting bounty programs.
 
-**Tools like CodeRabbit review *the code* — but they don’t explain *how the PR fits the big picture*.**
-Maintainers still burn time reading old issues, checking duplicates, or figuring out if this PR is even on-topic.
+PR Sentinel isn’t just another code reviewer. It answers:
 
----
+“Does this PR solve a real issue for our project and community, or is it just noise?”
 
-## 🗂️ What it does
+Skip the manual hunt through ancient issues and avoid burning time triaging irrelevant submissions.
 
-✅ **Classifies PRs automatically**
+🗂️ What It Does
+✅ Auto-classifies PRs
 
-* Checks if the PR is actually linked to an open issue (and whether that issue is still valid).
-* Flags PRs that *aren’t linked* or seem unrelated.
-* Highlights spam patterns (e.g., same contributor spamming trivial edits).
+Detects if a PR is properly linked to open/valid issues
 
----
+Flags PRs that are missing links or context, or seem unrelated
 
-✅ **Summarizes PR context**
+Spots contributor spam and repetitive, trivial edits
 
-* “This PR closes #123, overlaps with PR #122.”
-* “This issue already closed → likely stale.”
-* “Same author has 5 open PRs with similar content.”
+✅ Summarizes PR & Issue Context
 
----
+Shows relationships, cross-links: “This PR closes #123, overlaps with PR #122”
 
-✅ **Provides a simple “Relevance Score”**
+Highlights stale/duplicate issues
 
-* 0–100% match: *Does this PR actually address the issue description?*
-* Uses lightweight NLP checks (keyword match, diff relevance).
-* Surfaced as a comment or status check for maintainers.
+Spotlights contributors with repetitive activity
 
----
+✅ Community Signal & Relevance Score
 
-✅ **Auto-suggests next actions**
+0–100% match: Does the PR really address the issue description?
 
-* *Merge candidate*: high relevance, passing checks.
-* *Potential duplicate*: overlaps with other open PRs.
-* *Likely spam*: trivial or no linked issue → flag or auto-close.
-* *Needs clarifying*: missing issue link or vague description → auto-comment for contributor.
+Lightweight NLP scoring and comparison across related PRs
 
----
+Insightful comments and status checks for maintainers
 
-## 🏆 Benefits
+✅ Action Suggestions
 
-🔹 **For maintainers**
-Spend less time guessing: *Is this PR worth reading?*
-See clear signals on spam vs. signal, overlap vs. unique.
-Triage faster, pay out bounties more fairly.
+Merge candidate — high match, all checks passing
 
-🔹 **For contributors**
-Get auto-feedback if their PR is missing context or looks off-topic.
-No manual back-and-forth for basic checks.
+Potential duplicate — overlaps with existing open PRs
 
----
+Likely spam — trivial/unrelated, flagged for review or auto-close
 
-## ⚙️ How it works
+Needs clarifying — auto-comment to request clearer links or description
 
-* GitHub App or Action.
-* Runs on PR open/updated events.
-* Pulls related issue text, other open PRs.
-* NLP quick match: PR diff vs. issue keywords.
-* Posts results as a comment + status check.
-* Maintainers can override if needed.
+✅ Contributor Reputation & Health Analytics (unique differentiator)
 
----
+Track contributor trust scores using merge history, review feedback, and flagged/spam activity
 
-## ✨ Example
+Visualize new vs. returning contributors, high-impact teammates, and “burnout risk” signals
 
-```
+✅ Project Knowledge Graph & Governance Tools (unique differentiator)
+
+Create a semantic map to search the evolution of features, linked discussions, and contributor impact
+
+Track CLAs, compliance, onboarding documentation effectiveness
+
+🏆 Benefits
+🔹 For maintainers
+Decide faster: see which PRs are worth reviewing, which are likely spam, and spot outliers or duplicates immediately.
+Triage better, reward what matters.
+
+🔹 For contributors
+Transparent feedback: see if PRs lack context or may be considered off-topic.
+Skip unnecessary back-and-forth for basic checks.
+
+⚙️ How It Works
+GitHub App — organization-wide installation, secure and scoped
+
+Works on PR creation/updates, listens to org events via webhooks
+
+Pulls and processes related issues, PRs, contributor metadata
+
+Uses fast NLP, clustering, and graph-based techniques for scoring/recommendation
+
+Posts results as comments, status checks, and dashboard entries
+
+Maintainers override or tune as needed
+
+✨ Example
+text
 ✅ PR Sentinel report for #42
 
 - Linked issue: #35 (Open)
-- Relevance: 92% (Good match)
-- Overlaps with: PR #40 (Same file edits)
-- Spam check: Passed
-- Suggestion: Review for merge, check with PR #40 for conflicts.
-```
+- Relevance Score: 92% (Strong match)
+- Overlaps: PR #40 (Same file edits)
+- Community health: Author trust 4.8/5, no flagged spam in past 6 PRs
+- Suggestion: Review for merge, coordinate with PR #40 to resolve conflict.
+📣 Built For
+Busy maintainers handling high PR volume
 
----
+Teams running bug bounties who need to filter out low-effort submissions
 
-## 📣 Built for
+Projects that want community growth but need to keep quality high
 
-* Maintainers with high PR volume and limited time.
-* Teams who run bug bounties and want to catch low-effort bounty grabs.
-* Projects where “vibe coding” is welcome — but spam PRs aren’t.
+📌 Install & Try
+(Coming soon — standard GitHub App installation and onboarding wizard)
 
----
+🗝️ License
+MIT — use, modify, improve.
 
-## 📌 Install & Try
-
-*(To be added when live — standard GitHub App setup.)*
-
----
-
-## 🗝️ License
-
-MIT — naturally.
-
----
-
-**Stop guessing which PRs matter — focus your time where it counts.**
-👉 *PR Sentinel — signal in, noise out.*
-
+Stop guessing which PRs matter. Focus signal—cut noise.
+PR Sentinel — see the project, not just the code.

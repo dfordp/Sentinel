@@ -15,7 +15,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "PR Sentinel",
+  title: "Sentinel",
   description: " Built for Maintainers with high PR volume and limited time. Stop guessing which PRs matter focus your time where it counts. ",
 };
 
