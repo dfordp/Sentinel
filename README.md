@@ -105,16 +105,4 @@ The MVP lays the foundation for more advanced capabilities:
 * Community managers
 * Engineering orgs that manage external contributions
 
----
-
-## 📖 Example Demo Flow
-
-1. Install PR Sentinel GitHub App on a test repo.
-2. Load the repo in dashboard.
-3. View open PRs with:
-
-   * Contributor context
-   * “Similar Issues/PRs” section
-4. Cleanup repo data when done.
-
 
