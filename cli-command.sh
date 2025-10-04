@@ -1,0 +1,4 @@
+docker run -d --name my_zookeeper -e ALLOW_ANONYMOUS_LOGIN=yes -p 2181:2181 -v my_zookeeper_data:/bitnami/zookeeper bitnami/zookeeper:latest
+docker run -d --name my_kafka --network bridge -e KAFKA_BROKER_ID=1 -e KAFKA_CFG_ZOOKEEPER_CONNECT=my_zookeeper:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -p 9092:9092 -v my_kafka_data:/bitnami/kafka bitnami/kafka:latest
+docker run -d --name my_kafka --network bridge -e KAFKA_BROKER_ID=1 -e KAFKA_CFG_ZOOKEEPER_CONNECT=my_zookeeper:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -p 9092:9092 -v my_kafka_data:/bitnami/kafka bitnami/kafka:latest
+docker run -d --name my_rabbit -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest -p 5672:5672 -p 15672:15672 -v my_rabbit_data:/var/lib/rabbitmq rabbitmq:management
