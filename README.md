@@ -106,8 +106,57 @@ Teams running bug bounties who need to filter out low-effort submissions
 
 Projects that want community growth but need to keep quality high
 
-📌 Install & Try
-(Coming soon — standard GitHub App installation and onboarding wizard)
+Setup
+Here are direct Docker run commands for each required service, as well as the corresponding environment variable configuration for integrating them into your backend—for running alongside a Sentinel-style project like your outlined PR Sentinel tool.
+
+***
+
+### Docker Run Commands
+
+#### PostgreSQL
+```bash
+docker run -d --name my_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 -v my_postgres_data:/var/lib/postgresql/data postgres:latest
+```
+
+#### ZooKeeper (for Kafka)
+```bash
+docker run -d --name my_zookeeper -e ALLOW_ANONYMOUS_LOGIN=yes -p 2181:2181 -v my_zookeeper_data:/bitnami/zookeeper bitnami/zookeeper:latest
+```
+
+#### Kafka (Bitnami, after ZooKeeper is running)
+```bash
+docker run -d --name my_kafka --network bridge -e KAFKA_BROKER_ID=1 -e KAFKA_CFG_ZOOKEEPER_CONNECT=my_zookeeper:2181 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 -p 9092:9092 -v my_kafka_data:/bitnami/kafka bitnami/kafka:latest
+```
+
+#### RabbitMQ (Management UI enabled)
+```bash
+docker run -d --name my_rabbit -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest -p 5672:5672 -p 15672:15672 -v my_rabbit_data:/var/lib/rabbitmq rabbitmq:management
+```
+
+***
+
+### Backend Environment Variables
+
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres`
+- `DIRECT_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres`
+- `KAFKA_BROKER=localhost:9092`
+- `KAFKA_ZOOKEEPER=localhost:2181`
+- `RABBITMQ_URL=amqp://guest:guest@localhost:5672/`
+- `RABBITMQ_MANAGEMENT_URL=http://localhost:15672/`
+
+***
+
+### Usage Notes
+
+- Each Docker command can be run in the terminal to launch a corresponding service for Sentinel or any similar backend.[1][2][3]
+- Use the provided environment variables in your backend `.env` file or deployment config for seamless service integration and direct access.
+- All services will have persistent data via Docker volumes and are accessible through the specified ports on localhost, supporting reliable operation of features like PR classification, context summary, relevance scoring, and contributor analytics.
+
+This setup ensures that Sentinel—and related backend services—can leverage PostgreSQL, Kafka, and RabbitMQ for robust processing, analytics, and community intelligence workflows.[2][3][1]
+
+[1](https://hub.docker.com/_/postgres)
+[2](https://hub.docker.com/r/bitnami/kafka)
+[3](https://hub.docker.com/_/rabbitmq)
 
 🗝️ License
 MIT — use, modify, improve.

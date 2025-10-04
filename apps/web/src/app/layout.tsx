@@ -16,7 +16,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "Sentinel",
-  description: " Built for Maintainers with high PR volume and limited time. Stop guessing which PRs matter focus your time where it counts. ",
+  description: " A lightweight GitHub App that gives open source maintainers actionable community intelligence. ",
 };
 
 export default function RootLayout({
