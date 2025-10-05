@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from "react";
 import { GithubButton } from "../github-button";
-import Logo from "@/components/brand/logo";
 
 export default function AuthCard() {
   const [loading, setLoading] = useState(false);

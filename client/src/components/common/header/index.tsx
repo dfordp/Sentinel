@@ -1,14 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { Zap } from 'lucide-react'
-import { Chakra_Petch } from 'next/font/google'
 import Logo from '@/components/brand/logo'
 
-const chakraPetch = Chakra_Petch({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700']
-})
 
 export const Header = () => {
   return (
