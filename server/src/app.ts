@@ -440,35 +440,65 @@ app.get("/repo/insights-reviewed", async (req, res) => {
 
 
 
-      let result = { relevance_score: "", summary: "", difference_analysis: "", best_in_group: "", best_rationale: ""};
-      let retries = 0;
-      const MAX_RETRIES = 2;
+      let result = { relevance_score: "", summary: "", difference_analysis: "", best_in_group: "", best_rationale: "" };
+    let retries = 0;
+    const MAX_RETRIES = 3;
 
-      while (
-        retries < MAX_RETRIES &&
-        (
-          !result.summary ||
-          result.label === "unknown" ||
-          Object.values(result).every(v => v === "" || v === "unknown")
-        )
-      ) {
-        try {
-          result = JSON.parse(chatCompletion.choices?.[0]?.message?.content?.trim() ?? "{}");
-        } catch {
-          // If parsing fails, keep result as default
-        }
-        retries++;
-        // Optionally: re-call the model with a slightly modified prompt or log the attempt
-        // For now, just retry parsing the same output
+    // Recall the AI if any required field is missing, empty, or "unknown"
+    while (
+      retries < MAX_RETRIES &&
+      (
+        !result.summary ||
+        !result.difference_analysis ||
+        !result.best_in_group ||
+        !result.best_rationale ||
+        !result.relevance_score ||
+        Object.values(result).every(v => v === "" || v === "unknown" || v === null)
+      )
+    ) {
+      // Re-call the model (Groq) with the same prompt
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        model: "openai/gpt-oss-20b",
+        temperature: 1,
+        max_completion_tokens: 10000,
+        top_p: 1,
+        stream: false,
+        reasoning_effort: "medium",
+        stop: null
+      });
+
+      try {
+        result = JSON.parse(chatCompletion.choices?.[0]?.message?.content?.trim() ?? "{}");
+      } catch {
+        // If parsing fails, keep result as default
       }
+      retries++;
+    }
+
+      // // Fill any remaining missing fields with "N/A"
+      // Object.keys(result).forEach(key => {
+      //   if (
+      //     result[key] === "" ||
+      //     result[key] === undefined ||
+      //     result[key] === null ||
+      //     result[key] === "unknown"
+      //   ) {
+      //     result[key] = "N/A";
+      //   }
+      // });
+
       return {
         id: item.id,
         number: item.number,
         type: item.type,
         author: item.author,
         related: item.related,
-        is_stale: item.is_stale,
-        is_spam: item.is_spam,
         matches_requirements: item.matches_requirements,
         relevance_score: result.relevance_score,
         summary: result.summary,
