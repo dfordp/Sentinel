@@ -1,0 +1,17 @@
+export function LandingRoadmap() {
+  const items = ["Multi-repo view", "Contributor trust graph", "Spam detection engine"]
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-16 md:py-20" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title" className="text-2xl font-semibold">
+        {"Coming Soon"}
+      </h2>
+      <ul className="mt-4 grid gap-3 md:grid-cols-3">
+        {items.map((t) => (
+          <li key={t} className="rounded-xl border bg-card px-5 py-4 text-muted-foreground">
+            {t}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
