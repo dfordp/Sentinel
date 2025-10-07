@@ -135,11 +135,6 @@ function extractFileUrls(text) {
   return text.match(urlRegex) || [];
 }
 
-function summarizeDiff(diffText: string): string {
-  // TODO: Implement a real diff summarizer, or use an LLM for this
-  // For now, just return the first 500 characters as a summary
-  return diffText ? diffText.slice(0, 500) + (diffText.length > 500 ? '...' : '') : '';
-}
 
 app.get("/repo/keywords", async (req, res) => {
   try {
@@ -406,6 +401,10 @@ app.get("/repo/insights-reviewed", async (req, res) => {
         - Provide a single "relevance_score" as a percentage (0-100%), indicating how useful/important this contribution is relative to the project's active needs and roadmap.
         - Thoroughly summarize technically (reference unique and overlapping aspects, list key technical details, technical novelty or overlap).
         - Evaluate what sets this item apart (or what is missing), and highlight whether it covers unique ground compared to other items.
+        -  Carefully analyze the closure status and reason:
+          - If the item is closed, determine if it was closed as "completed" (successfully merged/implemented), "spam", "invalid", "wontfix", or "other".
+          - Use all available context (labels, comments, summary, rationale, etc.) to infer the most accurate closure reason.
+          - If open, set closure_reason to "n/a".
 
         Return a pure JSON object in this format:
         {
@@ -414,6 +413,7 @@ app.get("/repo/insights-reviewed", async (req, res) => {
           "difference_analysis": "What makes this unique, what it overlaps with, or what it lacks.",
           "best_in_group": "true|false",
           "best_rationale": "If this is the most relevant or highest-quality item among related ones, say why and reference the context. Otherwise, explain what is missing or less relevant."
+          "closure_reason": "completed|spam|invalid|other|n/a"
         }
 
         Content to review:
@@ -422,7 +422,7 @@ app.get("/repo/insights-reviewed", async (req, res) => {
       
 
       // Call Groq chat completion
-      const chatCompletion = await groq.chat.completions.create({
+        await groq.chat.completions.create({
         messages: [
           {
             role: "user",
@@ -440,7 +440,7 @@ app.get("/repo/insights-reviewed", async (req, res) => {
 
 
 
-      let result = { relevance_score: "", summary: "", difference_analysis: "", best_in_group: "", best_rationale: "" };
+      let result = { relevance_score: "", summary: "", difference_analysis: "", best_in_group: "", best_rationale: "",closure_reason:"" };
     let retries = 0;
     const MAX_RETRIES = 3;
 
@@ -481,30 +481,20 @@ app.get("/repo/insights-reviewed", async (req, res) => {
       retries++;
     }
 
-      // // Fill any remaining missing fields with "N/A"
-      // Object.keys(result).forEach(key => {
-      //   if (
-      //     result[key] === "" ||
-      //     result[key] === undefined ||
-      //     result[key] === null ||
-      //     result[key] === "unknown"
-      //   ) {
-      //     result[key] = "N/A";
-      //   }
-      // });
-
       return {
         id: item.id,
         number: item.number,
         type: item.type,
         author: item.author,
         related: item.related,
+        state: item.state,
         matches_requirements: item.matches_requirements,
         relevance_score: result.relevance_score,
         summary: result.summary,
         difference_analysis: result.difference_analysis,
         best_in_group: result.best_in_group,
         best_rationale: result.best_rationale,
+        closure_reason: result.closure_reason
       };
     })
   );
