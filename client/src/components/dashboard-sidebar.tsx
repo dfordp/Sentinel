@@ -8,9 +8,9 @@ const items = [
   { href: "/dashboard", label: "Home Dashboard", icon: "🏠" },
   { href: "/dashboard/issues", label: "Issues", icon: "🧾" },
   { href: "/dashboard/pull-requests", label: "Pull Requests", icon: "🔁" },
+  { href: "/dashboard/contributors", label: "Contributors", icon: "👥" },
   { href: "/dashboard/repositories", label: "Repositories", icon: "📂" },
   { href: "/dashboard/organizations", label: "Organizations", icon: "🏢" },
-  { href: "/dashboard/contributors", label: "Contributors", icon: "👥" },
   { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
 ]
 
