@@ -1,19 +1,19 @@
-"use client"
+import { LandingHero } from "@/components/landing-hero"
+import { LandingProblemSolution } from "@/components/landing-problem-solution"
+import { LandingHowItWorks } from "@/components/landing-how-it-works"
+import { LandingDemo } from "@/components/landing-demo"
+import { LandingRoadmap } from "@/components/landing-roadmap"
+import { LandingFooter } from "@/components/landing-footer"
 
-import { Header } from "@/components/common/header";
-
-
-
-export default function Landing() {
-  
+export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header/>
-      <main>
-        <div className="container mx-auto px-6 py-15 relative">
-          Landing Page
-        </div>
-      </main>
-    </div>
-  );
+    <main>
+      <LandingHero />
+      <LandingProblemSolution />
+      <LandingHowItWorks />
+      <LandingDemo />
+      <LandingRoadmap />
+      <LandingFooter />
+    </main>
+  )
 }
