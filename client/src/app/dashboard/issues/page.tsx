@@ -52,15 +52,15 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
 
   return (
     <div className="grid gap-6">
-      <Card className="bg-white shadow-md border-0">
-        <CardHeader className="bg-slate-50 rounded-t-lg">
-          <CardTitle>Issue Filters</CardTitle>
+      <Card className="bg-card shadow-md border border-border">
+        <CardHeader className="">
+          <CardTitle className="text-card-foreground text-lg">Issue Filters</CardTitle>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="flex gap-4 flex-wrap">
             <div>
-              <label className="block text-xs mb-1 font-medium">Contributor</label>
-              <select className="border rounded-md px-3 py-2 bg-white" defaultValue={selectedContributor} disabled>
+              <label className="block text-xs mb-1 font-medium text-foreground">Contributor</label>
+              <select className="border border-border rounded-md px-3 py-2 bg-secondary text-foreground" defaultValue={selectedContributor} disabled>
                 <option value="">All</option>
                 {contributors.map(c => (
                   <option key={c} value={c}>{c}</option>
@@ -68,8 +68,8 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
               </select>
             </div>
             <div>
-              <label className="block text-xs mb-1 font-medium">Closure Reason</label>
-              <select className="border rounded-md px-3 py-2 bg-white" defaultValue={selectedClosure} disabled>
+              <label className="block text-xs mb-1 font-medium text-foreground">Closure Reason</label>
+              <select className="border border-border rounded-md px-3 py-2 bg-secondary text-foreground" defaultValue={selectedClosure} disabled>
                 <option value="">All</option>
                 {closureReasons.map(r => (
                   <option key={r} value={r}>{r}</option>
@@ -87,12 +87,14 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
             key={tab.key}
             className={`px-4 py-2 rounded-md font-medium transition-colors ${
               activeTab === tab.key 
-                ? "bg-blue-600 text-white shadow-md" 
-                : "bg-white text-gray-700 hover:bg-gray-50 border"
+                ? "bg-primary text-primary-foreground shadow-md" 
+                : "bg-card text-card-foreground hover:bg-accent border border-border"
             }`}
             disabled={activeTab === tab.key}
           >
-            {tab.label} <span className="inline-block bg-white bg-opacity-20 text-xs px-2 py-0.5 rounded-full ml-1">{tab.count}</span>
+            {tab.label} <span className={`inline-block text-xs px-2 py-0.5 rounded-full ml-1 ${
+              activeTab === tab.key ? "bg-primary-foreground/20" : "bg-muted"
+            }`}>{tab.count}</span>
           </button>
         ))}
         
@@ -100,37 +102,39 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
         <button
           className={`px-4 py-2 rounded-md font-medium transition-colors ${
             activeTab !== "spam" && activeTab !== "stale" && activeTab !== "n/a"
-              ? "bg-blue-600 text-white shadow-md" 
-              : "bg-white text-gray-700 hover:bg-gray-50 border"
+              ? "bg-primary text-primary-foreground shadow-md" 
+              : "bg-card text-card-foreground hover:bg-accent border border-border"
           }`}
           disabled={activeTab !== "spam" && activeTab !== "stale" && activeTab !== "n/a"}
         >
-          Other <span className="inline-block bg-white bg-opacity-20 text-xs px-2 py-0.5 rounded-full ml-1">{otherCount}</span>
+          Other <span className={`inline-block text-xs px-2 py-0.5 rounded-full ml-1 ${
+            activeTab !== "spam" && activeTab !== "stale" && activeTab !== "n/a" ? "bg-primary-foreground/20" : "bg-muted"
+          }`}>{otherCount}</span>
         </button>
       </div>
 
       <div className="w-full flex flex-col gap-6">
         {filteredIssues.slice(0, visibleCount).map(issue => (
-          <Card key={issue.id} className="border-0 shadow-lg overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b pb-3">
+          <Card key={issue.id} className="border border-border shadow-lg overflow-hidden bg-card">
+            <CardHeader className="bg-gradient-to-r from-secondary to-card border-b border-border pb-3">
               <div className="flex items-center gap-4">
                 <img
                   src={getAvatarUrl(issue.author)}
                   alt={issue.author}
-                  className="w-10 h-10 rounded-full border-2 border-white shadow"
+                  className="w-10 h-10 rounded-full border-2 border-border shadow"
                 />
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
-                    <CardTitle className="text-lg font-semibold">
+                    <CardTitle className="text-lg font-semibold text-card-foreground">
                       {issue.type === "issue" ? "Issue" : "PR"} #{issue.number}
                     </CardTitle>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500 font-medium">
+                      <span className="text-sm text-muted-foreground font-medium">
                         Relevance: {issue.relevance_score}
                       </span>
                     </div>
                   </div>
-                  <div className="text-sm text-gray-600 font-medium mt-1">{issue.author}</div>
+                  <div className="text-sm text-muted-foreground font-medium mt-1">{issue.author}</div>
                   <div className="flex gap-2 mt-3 flex-wrap">
                     {/* Show closure reason as badge */}
                     <span className={`px-2 py-1 rounded-full text-xs font-bold shadow-sm
@@ -149,7 +153,7 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
                     </span>
                     {/* Additional tags as badges */}
                     {issue.labels && issue.labels.map(label => (
-                      <span key={label} className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs shadow-sm">{label}</span>
+                      <span key={label} className="px-2 py-1 rounded-full bg-primary/20 text-primary text-xs shadow-sm">{label}</span>
                     ))}
                   </div>
                 </div>
@@ -157,42 +161,42 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
             </CardHeader>
             <CardContent className="pt-4">
               <div className="mb-4">
-                <span className="font-semibold">Summary:</span>
-                <div className="text-sm mt-1 bg-slate-50 p-3 rounded-md">{issue.summary}</div>
+                <span className="font-semibold text-foreground">Summary:</span>
+                <div className="text-sm mt-1 bg-secondary text-secondary-foreground p-3 rounded-md">{issue.summary}</div>
               </div>
               
               <div className="mb-4">
-                <span className="font-semibold">Difference Analysis:</span>
-                <div className="text-xs mt-1 bg-slate-50 p-3 rounded-md">{issue.difference_analysis}</div>
+                <span className="font-semibold text-foreground">Difference Analysis:</span>
+                <div className="text-xs mt-1 bg-secondary text-secondary-foreground p-3 rounded-md">{issue.difference_analysis}</div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <span className="font-semibold">Best in Group:</span> 
-                  <span className={`ml-2 ${issue.best_in_group === "true" ? "text-green-600" : "text-red-600"}`}>
+                  <span className="font-semibold text-foreground">Best in Group:</span> 
+                  <span className={`ml-2 ${issue.best_in_group === "true" ? "text-green-400" : "text-red-400"}`}>
                     {issue.best_in_group}
                   </span>
                 </div>
                 
                 <div>
-                  <span className="font-semibold">Matches Requirements:</span> 
-                  <span className={`ml-2 ${issue.matches_requirements ? "text-green-600" : "text-red-600"}`}>
+                  <span className="font-semibold text-foreground">Matches Requirements:</span> 
+                  <span className={`ml-2 ${issue.matches_requirements ? "text-green-400" : "text-red-400"}`}>
                     {issue.matches_requirements ? "Yes" : "No"}
                   </span>
                 </div>
               </div>
               
               <div className="mt-4">
-                <span className="font-semibold">Best Rationale:</span>
-                <div className="text-xs mt-1 bg-slate-50 p-3 rounded-md">{issue.best_rationale}</div>
+                <span className="font-semibold text-foreground">Best Rationale:</span>
+                <div className="text-xs mt-1 bg-secondary text-secondary-foreground p-3 rounded-md">{issue.best_rationale}</div>
               </div>
               
               {issue.related && issue.related.length > 0 && (
                 <div className="mt-4">
-                  <span className="font-semibold">Related Issues:</span>
+                  <span className="font-semibold text-foreground">Related Issues:</span>
                   <div className="flex gap-2 mt-1">
                     {issue.related.map(rel => (
-                      <span key={rel} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-xs">{rel}</span>
+                      <span key={rel} className="px-2 py-1 bg-primary/20 text-primary rounded-md text-xs">{rel}</span>
                     ))}
                   </div>
                 </div>
@@ -202,7 +206,7 @@ export default function IssuesPage({ selectedContributor = "", selectedClosure =
         ))}
         {filteredIssues.length > visibleCount && (
           <button
-            className="mt-4 px-6 py-3 rounded-md bg-blue-600 text-white font-medium self-center hover:bg-blue-700 transition-colors shadow-md"
+            className="mt-4 px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium self-center hover:bg-primary/90 transition-colors shadow-md"
             disabled
           >
             See More Issues

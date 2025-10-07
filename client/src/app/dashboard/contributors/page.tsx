@@ -16,16 +16,10 @@ export default function ContributorsPage() {
     <div className="grid gap-8">
       <Card>
         <CardHeader>
-          <CardTitle>Reputation Scoring</CardTitle>
+            <div className="text-card-foreground text-xl font-semibold">
+              Reputation Scoring
+            </div>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          Score = 
-          (completed PRs × 5 + log₂(closed PRs + 1) × 2 + log₂(issues + 1) × 1)
-          × average relevance
-          × log₂(total contributions + 1)
-          − log₂(bad items + 1) × 10
-          − penalty for &quot;other&quot; and &quot;spam&quot; closure reasons
-        </CardContent>
       </Card>
 
       <table className="min-w-full text-sm table-fixed">

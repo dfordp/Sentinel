@@ -23,7 +23,7 @@ export function Sidebar() {
   return (
     <div className="flex h-full flex-col bg-sidebar">
       <div className="px-4 py-6">
-        <div className="text-lg font-semibold text-sidebar-foreground">PR Sentinel</div>
+        <div className="text-lg font-semibold text-sidebar-foreground">OpenLens</div>
       </div>
       <nav className="flex-1 px-3">
         <ul className="space-y-0.5">

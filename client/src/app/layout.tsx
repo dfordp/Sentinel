@@ -29,12 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} antialiased bg-[#0a0a0a]`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} antialiased bg-background`}
       >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem
+            forcedTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
           > 
             <Toaster

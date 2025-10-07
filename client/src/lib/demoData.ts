@@ -31,6 +31,10 @@ export function getIssuesAndPRsContributorsAndClosures() {
   return { allItems, contributors, closureReasons };
 }
 
+export function getPullRequests() {
+  return demoData.filter(item => item.type === "pull_request");
+}
+
 export function getContributors() {
   const map = new Map<string, {
     author: string,
@@ -135,4 +139,28 @@ export function getValidPullRequests() {
   );
 }
 
-// You can add more filters or validators as needed for your dashboard views.
+export function getIssueCategories() {
+  const issues = demoData.filter(item => item.type === "issue");
+  const categoryCounts = new Map<string, number>();
+  
+  issues.forEach(issue => {
+    const reason = issue.closure_reason || "n/a";
+    categoryCounts.set(reason, (categoryCounts.get(reason) || 0) + 1);
+  });
+  
+  // Map closure reasons to more friendly category names
+  const categoryMap: Record<string, { name: string; color: string }> = {
+    "completed": { name: "Completed", color: "var(--color-chart-1)" },
+    "wontfix": { name: "Won't Fix", color: "var(--color-chart-2)" },
+    "invalid": { name: "Invalid", color: "var(--color-chart-3)" },
+    "spam": { name: "Spam", color: "var(--color-chart-4)" },
+    "other": { name: "Other", color: "var(--color-chart-5)" },
+    "n/a": { name: "Open", color: "var(--color-chart-6)" }
+  };
+  
+  return Array.from(categoryCounts.entries()).map(([reason, count]) => ({
+    name: categoryMap[reason]?.name || reason,
+    value: count,
+    color: categoryMap[reason]?.color || "var(--color-chart-5)"
+  }));
+}
