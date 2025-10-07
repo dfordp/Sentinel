@@ -3,26 +3,29 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { Home, FolderCode, BadgeAlert } from "lucide-react"
+import { FaCodePullRequest } from "react-icons/fa6"
+import { IoPeopleSharp } from "react-icons/io5"
+import { IoMdSettings } from "react-icons/io"
 
 const items = [
-  { href: "/dashboard", label: "Home Dashboard", icon: "🏠" },
-  { href: "/dashboard/issues", label: "Issues", icon: "🧾" },
-  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: "🔁" },
-  { href: "/dashboard/repositories", label: "Repositories", icon: "📂" },
-  { href: "/dashboard/organizations", label: "Organizations", icon: "🏢" },
-  { href: "/dashboard/contributors", label: "Contributors", icon: "👥" },
-  { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
+  { href: "/dashboard", label: "Home Dashboard", icon: Home },
+  { href: "/dashboard/repositories", label: "Repositories", icon: FolderCode },
+  { href: "/dashboard/issues", label: "Issues", icon: BadgeAlert },
+  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: FaCodePullRequest },
+  { href: "/dashboard/contributors", label: "Contributors", icon: IoPeopleSharp },
+  { href: "/dashboard/settings", label: "Settings", icon: IoMdSettings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
   return (
-    <div className="flex h-full flex-col">
-      <div className="px-4 py-4">
-        <div className="text-lg font-semibold">PR Sentinel</div>
+    <div className="flex h-full flex-col bg-sidebar">
+      <div className="px-4 py-6">
+        <div className="text-lg font-semibold text-sidebar-foreground">PR Sentinel</div>
       </div>
-      <nav className="flex-1 px-2">
-        <ul className="space-y-1">
+      <nav className="flex-1 px-3">
+        <ul className="space-y-0.5">
           {items.map((it) => {
             const active = pathname === it.href
             return (
@@ -30,14 +33,13 @@ export function Sidebar() {
                 <Link
                   href={it.href}
                   className={cn(
-                    "block rounded-md px-3 py-2 text-sm text-foreground hover:bg-muted",
-                    active &&
-                      "bg-(--color-accent) text-(--color-sidebar-primary-foreground) hover:bg-(--color-accent) outline -outline-offset-2 outline-(--color-sidebar-primary)",
+                    "flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                    active
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent"
+                      : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   )}
                 >
-                  <span aria-hidden className="mr-2">
-                    {it.icon}
-                  </span>
+                  <it.icon className="mr-3 h-4 w-4" aria-hidden />
                   {it.label}
                 </Link>
               </li>
@@ -45,7 +47,7 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-      <div className="border-t px-4 py-3 text-xs text-muted-foreground">build: mvp</div>
+      <div className="border-t border-sidebar-border px-4 py-3 text-xs text-muted-foreground">build: mvp</div>
     </div>
   )
 }

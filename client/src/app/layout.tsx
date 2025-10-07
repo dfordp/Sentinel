@@ -27,19 +27,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} antialiased bg-[#0a0a0a]`}
       >
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           > 
             <Toaster
               richColors 
-              theme='light' 
+              theme='dark' 
             />
             {children}
             <Analytics/>
