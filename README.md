@@ -1,6 +1,6 @@
 # 🚨 Sentinel (MVP)
 
-PR Sentinel is a GitHub App designed to help **open source maintainers and teams** cut through the noise in their repositories.
+Sentinel is a GitHub App designed to help **open source maintainers and teams** cut through the noise in their repositories.
 Instead of just code review, PR Sentinel focuses on **community health, contribution quality, and actionable signals** so maintainers can spend less time filtering spam or duplicates — and more time merging meaningful work.
 
 ---
