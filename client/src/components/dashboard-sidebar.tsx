@@ -3,19 +3,19 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Home, FolderCode, BadgeAlert } from "lucide-react"
+import { Home, FolderCode, BadgeAlert, Building2 } from "lucide-react"
 import { FaCodePullRequest } from "react-icons/fa6"
 import { IoPeopleSharp } from "react-icons/io5"
 import { IoMdSettings } from "react-icons/io"
 
 const items = [
-  { href: "/dashboard", label: "Home Dashboard", icon: "🏠" },
-  { href: "/dashboard/issues", label: "Issues", icon: "🧾" },
-  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: "🔁" },
-  { href: "/dashboard/contributors", label: "Contributors", icon: "👥" },
-  { href: "/dashboard/repositories", label: "Repositories", icon: "📂" },
-  { href: "/dashboard/organizations", label: "Organizations", icon: "🏢" },
-  { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
+  { href: "/dashboard", label: "Home Dashboard", icon: Home },
+  { href: "/dashboard/issues", label: "Issues", icon: BadgeAlert },
+  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: FaCodePullRequest },
+  { href: "/dashboard/contributors", label: "Contributors", icon: IoPeopleSharp },
+  { href: "/dashboard/repositories", label: "Repositories", icon: FolderCode },
+  { href: "/dashboard/organizations", label: "Organizations", icon: Building2 },
+  { href: "/dashboard/settings", label: "Settings", icon: IoMdSettings },
 ]
 
 export function Sidebar() {
