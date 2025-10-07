@@ -24,14 +24,7 @@ export function IssueCategoryPie() {
   )
 }
 
-export function ContributorReputationBar() {
-  const data = [
-    { name: "alice", score: 92 },
-    { name: "bob", score: 75 },
-    { name: "cora", score: 66 },
-    { name: "dan", score: 58 },
-    { name: "erin", score: 52 },
-  ]
+export function ContributorReputationBar({ data }: { data: { name: string; score: number }[] }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data}>
@@ -41,5 +34,5 @@ export function ContributorReputationBar() {
         <Bar dataKey="score" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
-  )
+  );
 }

@@ -9,12 +9,13 @@ import { IoPeopleSharp } from "react-icons/io5"
 import { IoMdSettings } from "react-icons/io"
 
 const items = [
-  { href: "/dashboard", label: "Home Dashboard", icon: Home },
-  { href: "/dashboard/repositories", label: "Repositories", icon: FolderCode },
-  { href: "/dashboard/issues", label: "Issues", icon: BadgeAlert },
-  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: FaCodePullRequest },
-  { href: "/dashboard/contributors", label: "Contributors", icon: IoPeopleSharp },
-  { href: "/dashboard/settings", label: "Settings", icon: IoMdSettings },
+  { href: "/dashboard", label: "Home Dashboard", icon: "🏠" },
+  { href: "/dashboard/issues", label: "Issues", icon: "🧾" },
+  { href: "/dashboard/pull-requests", label: "Pull Requests", icon: "🔁" },
+  { href: "/dashboard/contributors", label: "Contributors", icon: "👥" },
+  { href: "/dashboard/repositories", label: "Repositories", icon: "📂" },
+  { href: "/dashboard/organizations", label: "Organizations", icon: "🏢" },
+  { href: "/dashboard/settings", label: "Settings", icon: "⚙️" },
 ]
 
 export function Sidebar() {
