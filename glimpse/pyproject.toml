@@ -1,0 +1,10 @@
+[project]
+name = "glimpse"
+version = "0.1.0"
+description = "Multimodal Arweave Indexer using ImageBind + ChromaDB"
+readme = "README.md"
+requires-python = ">=3.9,<=3.10"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
