@@ -114,20 +114,6 @@ function isSpam(item) {
   return spamWords.some(sw => text.includes(sw));
 }
 
-
-async function computeEmbedding(keywords) {
-  const input = Array.isArray(keywords) ? keywords.join(" ") : String(keywords);
-
-  const response = await openai.embeddings.create({
-    model: "text-embedding-3-small", // or "text-embedding-3-large"
-    input,
-    encoding_format: "float",
-  });
-
-  // response.data[0].embedding will be the embedding vector
-  return response.data[0].embedding;
-}
-
 function extractFileUrls(text) {
   if (!text) return [];
   // Simple regex for Markdown/image/file links
@@ -138,67 +124,80 @@ function extractFileUrls(text) {
 
 app.get("/repo/keywords", async (req, res) => {
   try {
-    const response = await axios.get(
+    const { data } = await axios.get(
       `https://api.github.com/repos/${OWNER}/${REPO}/issues?state=all&per_page=100`,
-      { headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github.v3+json" } }
+      { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } }
     );
-    const items = await Promise.all(
-      response.data.map(async item => {
-        // 1. Fetch all comments
-        const comments = await axios.get(item.comments_url, {
-          headers: {
-            Authorization: `Bearer ${GITHUB_TOKEN}`,
-            Accept: "application/vnd.github.v3+json"
-          }
-        });
-        const commentsArray = comments.data ? comments.data.map(c => c.body) : [];
 
+    const items = await Promise.all(
+      data.map(async (item) => {
         const type = item.pull_request ? "pull_request" : "issue";
-        const allText = [
+
+        const comments = await axios.get(item.comments_url, {
+          headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+        });
+        const commentsArray = comments.data?.map((c) => c.body) || [];
+
+        const textBlob = [
           item.title,
           item.body,
-          ...(item.labels ? item.labels.map(l => l.name) : []),
-          ...commentsArray
-        ].join(' ');
-        const keywords = extractKeywords(allText);
-        const embedding = await computeEmbedding(keywords);
+          ...(item.labels?.map((l) => l.name) || []),
+          ...commentsArray,
+        ].join(" ");
 
-        if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
-          throw new Error("Embedding is empty or invalid");
+        const keywords = extractKeywords(textBlob);
+        const related = (item.body || "").match(/#\d+/g) || [];
+        const matchesRequirements = (item.body || "").toLowerCase().includes("checklist");
+        const fileUrls = extractFileUrls(textBlob);
+
+        // Compute base embedding via OpenAI
+        const embeddingResp = await openai.embeddings.create({
+          model: "text-embedding-3-small",
+          input: keywords.join(" "),
+          encoding_format: "float",
+        });
+        const embedding = embeddingResp.data[0].embedding;
+
+        // Optional: run through neural operator for contextual enhancement
+        let finalEmbedding = embedding;
+        try {
+          if (!process.env.NEURAL_OPERATOR_URL) {
+            throw new Error("NEURAL_OPERATOR_URL is not defined");
+          }
+          const response = await axios.post(process.env.NEURAL_OPERATOR_URL, {
+            A_embeddings: [embedding], // dummy 1D to 2D
+            B_embeddings: [embedding],
+          });
+          let finalEmbedding = embedding;
+          try {
+            const fused = response.data?.fused;
+            if (Array.isArray(fused) && fused.length > 0) {
+              const candidate = fused[0][0]; // get first batch, first layer
+              if (Array.isArray(candidate) && candidate.every(v => typeof v === "number")) {
+                finalEmbedding = candidate;
+              }
+            }
+          } catch (err) {
+            console.log("Neural operator output invalid, using OpenAI embedding instead:", err.message);
+          }
+        } catch (err) {
+          console.log("Neural operator unavailable, using raw embedding.", err);
         }
 
-        const related = (item.body || "").match(/#\d+/g) || [];
-        const matchesRequirements = (item.body || "").toLowerCase().includes('checklist');
-
-        const fileUrls = [
-        ...extractFileUrls(item.body),
-        ...(Array.isArray(item.comments) ? item.comments.flatMap(extractFileUrls) : [])
-      ];
-      // For PRs, fetch and summarize the diff
-      let diffSummary = "";
-      if (item.type === "pull_request" && item.pull_request?.diff_url) {
-        const diffResponse = await axios.get(item.pull_request.diff_url, { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } });
-        diffSummary = diffResponse.data; // Implement summarizeDiff as needed
-      }
-
-
-        // take into account code differences 
-        // better interlinking and take into context other related issues and other issues and prs that take into account similar keywords and all 
-        // take into account status of the issue and pr also as context 
-
-        // 2. Store all fields (including comments!) in the DB
         await pool.query(
-          `INSERT INTO github_items
-            (id, number, type, keywords, labels, embedding, state, author, updated_at, created_at, related, is_stale, is_spam, matches_requirements, comments, title, body, file_urls, diff_summary)
-          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
+          `INSERT INTO github_items (
+            id, number, type, keywords, labels, embedding, state, author, updated_at, created_at,
+            related, is_stale, is_spam, matches_requirements, comments, title, body, file_urls
+          )
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
           ON CONFLICT (id) DO NOTHING`,
           [
             item.id,
             item.number,
             type,
             keywords,
-            item.labels?.map(l => l.name),
-            pgvector.toSql(embedding),
+            item.labels?.map((l) => l.name) || [],
+            pgvector.toSql(finalEmbedding),
             item.state,
             item.user?.login,
             item.updated_at,
@@ -211,20 +210,19 @@ app.get("/repo/keywords", async (req, res) => {
             item.title,
             item.body,
             fileUrls,
-            diffSummary
           ]
         );
-        return { id: item.id, keywords, embedding };
+
+        return { id: item.id, keywords, embedding: finalEmbedding };
       })
     );
+
     fs.writeFileSync("./embeddings.json", JSON.stringify(items, null, 2));
     res.json(items);
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    res.status(500).json({ error: "Failed to process keywords/embedding/DB", details: errorMessage });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to process embeddings", details: err.message });
   }
 });
-
 
 app.get("/repo/insights-reviewed", async (req, res) => {
   try {
